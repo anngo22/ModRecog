@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  triton:
+    image: nvcr.io/nvidia/tritonserver:24.04-py3
+    runtime: nvidia
+    ports:
+      - "8000:8000" # HTTP
+      - "8001:8001" # gRPC
+      - "8002:8002" # Metrics
+    volumes:
+      - ./models/triton:/models
+    command: tritonserver --model-repository=/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.12.2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mlruns:/mlruns
+    command: mlflow server --host 0.0.0.0 --port 8080 --backend-store-uri /mlruns

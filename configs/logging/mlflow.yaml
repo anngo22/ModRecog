@@ -1,0 +1,6 @@
+experiment_name: modrecog
+tracking_uri: http://127.0.0.1:8080
+log_model: true
+tags:
+  project: ModRecog
+  dataset: RadioML2018

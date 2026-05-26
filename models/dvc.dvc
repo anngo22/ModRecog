@@ -1,0 +1,6 @@
+outs:
+- md5: d66770d507bbee1fde83619fa8ebf463.dir
+  size: 6222038
+  nfiles: 3
+  hash: md5
+  path: dvc

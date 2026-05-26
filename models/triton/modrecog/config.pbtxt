@@ -1,0 +1,24 @@
+name: "modrecog"
+backend: "onnxruntime"
+max_batch_size: 256
+
+input [
+  {
+    name: "iq_samples"
+    data_type: TYPE_FP32
+    dims: [ 2, 1024 ]
+  }
+]
+
+output [
+  {
+    name: "logits"
+    data_type: TYPE_FP32
+    dims: [ 24 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 64, 128, 256 ]
+  max_queue_delay_microseconds: 5000
+}

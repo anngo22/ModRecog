@@ -1,0 +1,8 @@
+defaults:
+  - data: radioml2018
+  - model: resnet
+  - training: default
+  - logging: mlflow
+  - _self_
+
+seed: 42

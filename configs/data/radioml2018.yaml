@@ -1,0 +1,15 @@
+raw_path: data/raw/GOLD_XYZ_OSC.0001_1024.hdf5
+processed_path: data/processed
+num_classes: 24
+window_length: 1024
+input_channels: 2
+batch_size: 512
+num_workers: 4
+val_split: 0.1
+test_split: 0.1
+snr_min: -20
+snr_max: 30
+# Set to an integer to cap the dataset size before splitting.
+# Useful for quick CPU experiments (e.g. 50000 ≈ 5 min/epoch on CPU).
+# null = use the full 2.5 M-sample dataset.
+max_samples: ~

@@ -1,0 +1,8 @@
+name: resnet1d
+num_classes: 24
+input_channels: 2
+window_length: 1024
+num_residual_stacks: 6
+base_filters: 32
+kernel_size: 3
+alpha_dropout_rate: 0.1
