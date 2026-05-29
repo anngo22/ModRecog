@@ -1,9 +1,0 @@
-Checkpoint:
-  _every_n_train_steps: 0
-  mode: max
-  monitor: val/f1
-  save_last: true
-  save_top_k: 1
-  save_weights_only: false
-original_filename: last-v1.ckpt
-score: 0.49589061737060547
