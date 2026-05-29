@@ -1,8 +1,5 @@
 [core]
     remote = data-store
-['remote "yadisk"']
-    url = webdavs://webdav.yandex.ru/modrecog-data
-    user = modrecog-data
 ['remote "data-store"']
     url = C:\Users\User\modrecog\data
 ['remote "model-store"']

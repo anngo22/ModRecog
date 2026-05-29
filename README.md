@@ -126,6 +126,44 @@ EarlyStopping по val_loss (patience=10), ModelCheckpoint (top-1 по val/f1).
 
 ---
 
+## Структура проекта
+
+```
+ModRecog/
+├── configs/                    # Hydra-конфиги
+│   ├── data/radioml2018.yaml
+│   ├── logging/mlflow.yaml
+│   ├── model/resnet.yaml
+│   ├── training/default.yaml
+│   └── config.yaml             # точка входа с defaults
+├── data/
+│   └── raw.dvc                 # DVC-указатель на датасет
+├── models/
+│   ├── dvc.dvc                 # DVC-указатель на чекпоинты
+│   └── triton/modrecog/
+│       ├── 1/                  # model.onnx (не в git, создаётся export-onnx)
+│       └── config.pbtxt        # конфигурация Triton
+├── modrecog/
+│   ├── data.py                 # RadioMLDataModule
+│   ├── export.py               # ONNX экспорт
+│   ├── infer.py                # инференс из чекпоинта
+│   ├── infer_triton.py         # HTTP-клиент Triton
+│   ├── model.py                # ResNet1D + LightningModule
+│   ├── train.py                # обучение
+│   └── utils.py                # утилиты, MODULATION_CLASSES
+├── scripts/
+│   ├── baseline_xgb.py         # XGBoost-бейзлайн
+│   └── make_samples_json.py    # генерация тестовых данных для инференса
+├── tests/
+│   └── test_model.py
+├── commands.py                 # CLI-точка входа (fire + hydra)
+├── docker-compose.yaml         # MLflow + Triton
+├── pyproject.toml
+└── README.md
+```
+
+---
+
 ## Setup
 
 Разработка велась на Windows 10, Python 3.11. Для установки зависимостей используется poetry.

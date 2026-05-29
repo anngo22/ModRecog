@@ -5,6 +5,8 @@ from pathlib import Path
 import h5py
 import numpy as np
 
+from modrecog.utils import MODULATION_CLASSES
+
 DEFAULT_HDF5 = "data/raw/GOLD_XYZ_OSC.0001_1024.hdf5"
 DEFAULT_OUT = "samples.json"
 
@@ -41,8 +43,6 @@ def make_samples(
     Path(out).write_text(json.dumps(samples, indent=None))
     print(f"Wrote {len(samples)} sample(s) to {out}")
     for i, (lbl, db) in enumerate(zip(true_labels, sample_snrs, strict=False)):
-        from modrecog.utils import MODULATION_CLASSES
-
         print(f"  [{i}] true class: {MODULATION_CLASSES[lbl]} (SNR {db:+.0f} dB)")
 
 

@@ -21,6 +21,5 @@ COPY modrecog/ ./modrecog/
 COPY commands.py ./
 COPY configs/ ./configs/
 
-EXPOSE 8000
-
-CMD ["python", "commands.py", "infer", "--help"]
+ENTRYPOINT ["python", "commands.py"]
+CMD ["infer", "--help"]
