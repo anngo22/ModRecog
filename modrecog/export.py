@@ -35,29 +35,5 @@ def export_to_onnx(
     print(f"ONNX model saved to {out}")
 
 
-def export_to_tensorrt(
-    onnx_path: str = "models/triton/modrecog/1/model.onnx",
-    output_path: str = "models/triton/modrecog/1/model.trt",
-    fp16: bool = True,
-) -> None:
-    """Convert an ONNX model to a TensorRT engine.
-
-    Requires TensorRT and the ``tensorrt`` Python package to be installed.
-    Use the ``nvcr.io/nvidia/tensorrt`` Docker image for a ready environment.
-
-    Args:
-        onnx_path: Path to the source ONNX file.
-        output_path: Destination ``.trt`` engine file.
-        fp16: Enable FP16 precision mode.
-    """
-    # TensorRT export requires the TRT SDK installed in the environment.
-    # Run inside nvcr.io/nvidia/tensorrt and implement trt.Builder / OnnxParser.
-    raise NotImplementedError(
-        "TensorRT export requires the TensorRT SDK. "
-        "Run inside the nvcr.io/nvidia/tensorrt container and implement "
-        "trt.Builder / trt.OnnxParser steps here."
-    )
-
-
 if __name__ == "__main__":
     export_to_onnx("models/dvc/last.ckpt")

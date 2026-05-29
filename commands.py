@@ -74,11 +74,32 @@ def download_data(dest: str = "data/raw") -> None:
     _download(dest)
 
 
+def infer_triton(
+    input_file: str,
+    url: str = "localhost:8000",
+    model_name: str = "modrecog",
+) -> None:
+    """Run inference via Triton Inference Server.
+
+    Requires Triton running (`docker compose up triton -d`) and the ONNX model
+    exported to models/triton/modrecog/1/model.onnx.
+    """
+    from modrecog.infer_triton import infer_triton as _infer_triton
+
+    results = _infer_triton(input_file, url=url, model_name=model_name)
+    for i, r in enumerate(results):
+        name = r["class_name"]
+        cid = r["class_id"]
+        conf = r["confidence"]
+        print(f"[{i}] {name} (id={cid}, conf={conf:.4f})")
+
+
 if __name__ == "__main__":
     fire.Fire(
         {
             "train": train,
             "infer": infer,
+            "infer-triton": infer_triton,
             "export-onnx": export_onnx,
             "export-tensorrt": export_tensorrt,
             "download-data": download_data,

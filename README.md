@@ -121,7 +121,6 @@ EarlyStopping по val_loss (patience=10), ModelCheckpoint (top-1 по val/f1).
 | ---------------------------- | ------------------------------------- | ------------------------------ |
 | PyTorch Lightning checkpoint | `models/dvc/best-*.ckpt`              | дообучение, локальный инференс |
 | ONNX                         | `models/triton/modrecog/1/model.onnx` | кросс-платформенный инференс   |
-| TensorRT engine              | `models/triton/modrecog/1/model.trt`  | оптимизированный GPU-инференс  |
 
 Размер модели: ~255 тыс. параметров (~1 МБ ONNX-файл).
 
@@ -129,7 +128,9 @@ EarlyStopping по val_loss (patience=10), ModelCheckpoint (top-1 по val/f1).
 
 ## Setup
 
-Разработка велась на Windows 10, Python 3.11. Для установки зависимостей используется Poetry.
+Разработка велась на Windows 10, Python 3.11. Для установки зависимостей используется poetry.
+
+Начало работы:
 
 ```bash
 git clone https://github.com/anngo22/ModRecog
@@ -148,11 +149,10 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-> Если PyTorch не устанавливается из-за ограничения в 260 символов,
-> то выполните перед `pip install poetry`:
+> Ubuntu/Debian. Если `python -m .venv` завершается с ошибкой `ensurepip is not available`, запустите:
 >
 > ```powershell
-> python -m poetry config virtualenvs.in-project true
+> sudo apt install python3.12-venv
 > ```
 
 Установить зависимости:
@@ -169,13 +169,11 @@ poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
 
-> При первом запуске prettier может переформатировать файлы, если запустить команду **второй раз**, все хуки пройдут со статусом `Passed`.
-
 ---
 
 ## Train
 
-Предполагается, что MLflow server уже запущен:
+Сначала запускается:
 
 ```bash
 docker compose up mlflow -d
@@ -183,15 +181,18 @@ docker compose up mlflow -d
 mlflow server --host 127.0.0.1 --port 8080
 ```
 
-Запущенный процесс скачает данные с Kaggle, если не сможет их получить из DVC-хранилища.
-Требуется `~/.kaggle/kaggle.json` или переменные окружения `KAGGLE_USERNAME` и `KAGGLE_KEY`.
-Данные также можно получить из DVC напрямую:
+Предполагается, что MLflow server уже запущен.
+
+Затем:
 
 ```bash
-dvc pull --remote data-store
+poetry run python commands.py download-data
 ```
 
-Запуск тренировки:
+Запущенный процесс скачает данные с Kaggle, если не сможет их получить из DVC-хранилища (`dvc pull --remote data-store`).
+Требуется `~/.kaggle/kaggle.json` или переменные окружения `KAGGLE_USERNAME` и `KAGGLE_KEY`.
+
+Запуск тренировки (пример на CPU для `SNR >= 0`):
 
 ```bash
 # Быстрый запуск на CPU: 50 тыс. сэмплов, SNR >= 0 дБ, 30 эпох
@@ -228,13 +229,6 @@ poetry run export-onnx --checkpoint models/dvc/last.ckpt
 Файл сохраняется в `models/triton/modrecog/1/model.onnx`.
 Конфигурация Triton находится в `models/triton/modrecog/config.pbtxt`.
 
-**TensorRT.** Конвертация ONNX -> TRT реализована как заглушка (`NotImplementedError`) — требует TensorRT SDK.
-Запускать внутри образа `nvcr.io/nvidia/tensorrt`:
-
-```bash
-poetry run export-tensorrt
-```
-
 **Triton Inference Server.** Запуск локального сервера:
 
 ```bash
@@ -270,6 +264,12 @@ Wrote 3 sample(s) to samples.json
 poetry run python commands.py infer samples.json
 # или:
 poetry run python commands.py infer samples.json --checkpoint models/dvc/last.ckpt
+```
+
+**Запуск инференса из Triton Inference Server:**
+
+```bash
+poetry run python commands.py infer-triton samples.json
 ```
 
 Пример вывода:

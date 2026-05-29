@@ -22,6 +22,7 @@ matplotlib = "^3.8"
 torchmetrics = "^1.3"
 onnx = "^1.16"
 onnxruntime = "^1.18"
+tritonclient = {version = "^2.44", extras = ["http"]}
 kaggle = "^1.6"
 dvc-yadisk = "^0.1.8"
 dvc-webdav = "^3.0.1"
@@ -39,6 +40,7 @@ train = "commands:train"
 infer = "commands:infer"
 export-onnx = "commands:export_onnx"
 export-tensorrt = "commands:export_tensorrt"
+infer-triton = "commands:infer_triton"
 
 [tool.ruff]
 line-length = 88
